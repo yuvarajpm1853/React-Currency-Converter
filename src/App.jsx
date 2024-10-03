@@ -1,8 +1,11 @@
-
+import { useState } from 'react';
 import './App.css'
 
 function App() {
-
+  const [amt, setAmt] = useState("");
+  const [fromCurrency,setFromCurrency] = useState("INR");
+  const [toCurrency, setToCurrency] = useState("USD");
+  const [rate, setRate] = useState("");
   return (
     <>
     <div className="currency-converter">
@@ -11,11 +14,12 @@ function App() {
         <h1>Currency Converter</h1>
         <div className="input-container">
           <label htmlFor="amount">Amount: </label>
-          <input type="text" required id="amount" />
+          <input type="text" required id="amount" 
+          placeholder='Enter an amount' onChange={e=>setAmt(e.target.value)}/>
         </div>
         <div className="input-container">
           <label htmlFor="fromCurrency">From Currency: </label>
-          <select name="fromCurrency" id="fromCurrency">
+          <select name="fromCurrency" id="fromCurrency" value={fromCurrency} onChange={e=>setFromCurrency(e.target.value)}>
             <option value="USD">USD - United States Dollar</option>
             <option value="EUR">EUR - Euro</option>
             <option value="GBP">GBP - British Pound Sterling</option>
@@ -30,7 +34,7 @@ function App() {
         </div>
         <div className="input-container">
           <label htmlFor="toCurrency">To Currency: </label>
-          <select name="toCurrency" id="toCurrency">
+          <select name="toCurrency" id="toCurrency" value={toCurrency} onChange={e=>setToCurrency(e.target.value)}>
             <option value="USD">USD - United States Dollar</option>
             <option value="EUR">EUR - Euro</option>
             <option value="GBP">GBP - British Pound Sterling</option>
@@ -44,7 +48,7 @@ function App() {
           </select>
         </div>
       <div className="result">
-        <p>1 USD is equal to 100 INR</p>
+        <p>{amt} {fromCurrency} is equal to {amt} {toCurrency} </p>
       </div>
       </div>
     </div>
