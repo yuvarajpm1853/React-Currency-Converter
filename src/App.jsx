@@ -1,11 +1,27 @@
 import { useState } from 'react';
 import './App.css'
+import { useEffect } from 'react';
 
 function App() {
-  const [amt, setAmt] = useState("");
+  const [amt, setAmt] = useState(1);
   const [fromCurrency,setFromCurrency] = useState("INR");
   const [toCurrency, setToCurrency] = useState("USD");
   const [rate, setRate] = useState("");
+
+  useEffect(()=>{
+    const getExchangeRate = async () =>{
+      try{
+        let url = `https://open.er-api.com/v6/latest/${fromCurrency}`;
+        const resp = await fetch(url)
+          .then(res=> res.json());
+        setRate(resp.rates[toCurrency]);
+      }
+      catch(err){
+        console.log(err);
+      }
+    }
+    getExchangeRate();
+  })
   return (
     <>
     <div className="currency-converter">
@@ -14,8 +30,12 @@ function App() {
         <h1>Currency Converter</h1>
         <div className="input-container">
           <label htmlFor="amount">Amount: </label>
-          <input type="text" required id="amount" 
-          placeholder='Enter an amount' onChange={e=>setAmt(e.target.value)}/>
+          {/* text works with parseFloat */}
+          {/* while number makes NaN when any chrs entered */}
+          <input type="text" required id="amount" value={amt}
+          placeholder='Enter an amount' 
+          onChange={e=>setAmt(parseFloat(e.target.value))}/>
+          {/* parseFloat => makes enter only numbers in input */}
         </div>
         <div className="input-container">
           <label htmlFor="fromCurrency">From Currency: </label>
@@ -48,7 +68,7 @@ function App() {
           </select>
         </div>
       <div className="result">
-        <p>{amt} {fromCurrency} is equal to {amt} {toCurrency} </p>
+        <p>{amt} {fromCurrency} is equal to {(amt*rate).toFixed(4)} {toCurrency} </p>
       </div>
       </div>
     </div>
